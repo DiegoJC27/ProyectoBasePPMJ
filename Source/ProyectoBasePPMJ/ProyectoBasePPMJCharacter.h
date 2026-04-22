@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Gun.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "ProyectoBasePPMJCharacter.generated.h"
@@ -48,6 +49,10 @@ protected:
 	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MouseLookAction;
+	
+	/** Shoot Input Action */
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* ShootAction;
 
 public:
 
@@ -59,6 +64,8 @@ protected:
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void BeginPlay() override;
+
 protected:
 
 	/** Called for movement input */
@@ -66,6 +73,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void Shoot(const FInputActionValue& Value);
 
 public:
 
@@ -84,6 +93,11 @@ public:
 	/** Handles jump pressed inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AGun> gunClass;
+	UPROPERTY(VisibleAnywhere)
+	AGun* currentGun;
 
 public:
 

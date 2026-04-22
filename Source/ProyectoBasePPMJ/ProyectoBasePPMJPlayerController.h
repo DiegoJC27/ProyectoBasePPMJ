@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PlayerHUD.h"
 #include "GameFramework/PlayerController.h"
 #include "ProyectoBasePPMJPlayerController.generated.h"
 
@@ -41,4 +42,10 @@ protected:
 	/** Input mapping context setup */
 	virtual void SetupInputComponent() override;
 
+public:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UPlayerHUD> hudClass;
+
+	UPROPERTY(VisibleAnywhere)
+	UPlayerHUD* HUDWidget;
 };

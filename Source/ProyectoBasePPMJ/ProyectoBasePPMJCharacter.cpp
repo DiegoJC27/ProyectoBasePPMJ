@@ -54,7 +54,7 @@ void AProyectoBasePPMJCharacter::SetupPlayerInputComponent(UInputComponent* Play
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
@@ -65,10 +65,26 @@ void AProyectoBasePPMJCharacter::SetupPlayerInputComponent(UInputComponent* Play
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AProyectoBasePPMJCharacter::Look);
+	
+		// Shooting
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &AProyectoBasePPMJCharacter::Shoot);
 	}
 	else
 	{
 		UE_LOG(LogProyectoBasePPMJ, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	}
+}
+
+void AProyectoBasePPMJCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	GetMesh()->HideBoneByName("gun", EPhysBodyOp::PBO_None);
+	currentGun = GetWorld()->SpawnActor<AGun>(gunClass);
+
+	if (currentGun) {
+		currentGun->SetOwner(this);
+		currentGun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("gunSocket"));
+		currentGun->ownerController = GetController();
 	}
 }
 
@@ -88,6 +104,11 @@ void AProyectoBasePPMJCharacter::Look(const FInputActionValue& Value)
 
 	// route the input
 	DoLook(LookAxisVector.X, LookAxisVector.Y);
+}
+
+void AProyectoBasePPMJCharacter::Shoot(const FInputActionValue& Value)
+{
+	if (currentGun) currentGun->PullTrigger();
 }
 
 void AProyectoBasePPMJCharacter::DoMove(float Right, float Forward)

@@ -31,6 +31,8 @@ void AProyectoBasePPMJPlayerController::BeginPlay()
 		}
 
 	}
+	HUDWidget = CreateWidget<UPlayerHUD>(this, hudClass);
+	HUDWidget->AddToViewport();
 }
 
 void AProyectoBasePPMJPlayerController::SetupInputComponent()
