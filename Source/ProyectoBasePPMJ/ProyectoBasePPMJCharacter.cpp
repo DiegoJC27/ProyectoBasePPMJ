@@ -67,7 +67,7 @@ void AProyectoBasePPMJCharacter::SetupPlayerInputComponent(UInputComponent* Play
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AProyectoBasePPMJCharacter::Look);
 	
 		// Shooting
-		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Triggered, this, &AProyectoBasePPMJCharacter::Shoot);
+		EnhancedInputComponent->BindAction(ShootAction, ETriggerEvent::Started, this, &AProyectoBasePPMJCharacter::Shoot);
 	}
 	else
 	{
@@ -80,6 +80,10 @@ void AProyectoBasePPMJCharacter::BeginPlay()
 	Super::BeginPlay();
 	GetMesh()->HideBoneByName("gun", EPhysBodyOp::PBO_None);
 	currentGun = GetWorld()->SpawnActor<AGun>(gunClass);
+
+	OnTakeAnyDamage.AddDynamic(this, &AProyectoBasePPMJCharacter::OnDamageTaken);
+
+	health = maxHealth;
 
 	if (currentGun) {
 		currentGun->SetOwner(this);
@@ -151,4 +155,17 @@ void AProyectoBasePPMJCharacter::DoJumpEnd()
 {
 	// signal the character to stop jumping
 	StopJumping();
+}
+
+void AProyectoBasePPMJCharacter::OnDamageTaken(AActor* damageActor, float damage, const UDamageType* GamageType, AController* instigatedBy, AActor* DamageCauser)
+{
+	if (isAlive) {
+		health -= damage;
+		UE_LOG(LogTemp, Warning, TEXT("Damaged %f"), health);
+		if (health <= 0) {
+			isAlive = false;
+			health = 0;
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		}
+	}
 }
