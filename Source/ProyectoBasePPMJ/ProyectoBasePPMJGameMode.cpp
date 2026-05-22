@@ -6,3 +6,13 @@ AProyectoBasePPMJGameMode::AProyectoBasePPMJGameMode()
 {
 	// stub
 }
+
+void AProyectoBasePPMJGameMode::BeginPlay()
+{
+	player = Cast<AProyectoBasePPMJCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemyAI::StaticClass(), enemyArray);
+	for (AActor* ene : enemyArray) {
+		Cast<AEnemyAI>(ene)->StartBehaviorTree(player);
+	}
+}

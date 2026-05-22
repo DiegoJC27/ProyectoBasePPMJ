@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/ProgressBar.h"
 #include "PlayerHUD.generated.h"
 
 /**
@@ -13,5 +14,10 @@ UCLASS()
 class PROYECTOBASEPPMJ_API UPlayerHUD : public UUserWidget
 {
 	GENERATED_BODY()
-	
+
+public:
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	UProgressBar* HealthBar;
+
+	void SetPercent(float value);
 };

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Gun.h"
+#include "ProyectoBasePPMJPlayerController.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "ProyectoBasePPMJCharacter.generated.h"
@@ -74,7 +75,6 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	void Shoot(const FInputActionValue& Value);
 
 public:
 
@@ -94,6 +94,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
 
+	UFUNCTION(BlueprintCallable, Category="Input")
+	void Shoot();
+
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AGun> gunClass;
 	UPROPERTY(VisibleAnywhere)
@@ -109,6 +112,11 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool isAlive = true;
+
+	float gameOverDelay = 3.0f;
+	void RestarLevel();
+
+	void UpdateHUD();
 public:
 
 	/** Returns CameraBoom subobject **/

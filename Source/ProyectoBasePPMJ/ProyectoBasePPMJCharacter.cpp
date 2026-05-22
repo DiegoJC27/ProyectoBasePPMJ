@@ -110,9 +110,9 @@ void AProyectoBasePPMJCharacter::Look(const FInputActionValue& Value)
 	DoLook(LookAxisVector.X, LookAxisVector.Y);
 }
 
-void AProyectoBasePPMJCharacter::Shoot(const FInputActionValue& Value)
+void AProyectoBasePPMJCharacter::Shoot()
 {
-	if (currentGun) currentGun->PullTrigger();
+	if (currentGun && isAlive) currentGun->PullTrigger();
 }
 
 void AProyectoBasePPMJCharacter::DoMove(float Right, float Forward)
@@ -161,11 +161,29 @@ void AProyectoBasePPMJCharacter::OnDamageTaken(AActor* damageActor, float damage
 {
 	if (isAlive) {
 		health -= damage;
-		UE_LOG(LogTemp, Warning, TEXT("Damaged %f"), health);
+		UpdateHUD();
 		if (health <= 0) {
 			isAlive = false;
 			health = 0;
 			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		}
+	}
+}
+
+void AProyectoBasePPMJCharacter::RestarLevel()
+{
+	FString name = UGameplayStatics::GetCurrentLevelName(GetWorld());
+	UGameplayStatics::OpenLevel(GetWorld(), *name);
+}
+
+void AProyectoBasePPMJCharacter::UpdateHUD()
+{
+	AProyectoBasePPMJPlayerController* playerController = Cast< AProyectoBasePPMJPlayerController>(GetController());
+	if (playerController) {
+		playerController->HUDWidget->SetPercent(health / maxHealth);
+		if (health <= 0) {
+			FTimerHandle gameOverHandle;
+			GetWorldTimerManager().SetTimer(gameOverHandle, this, &AProyectoBasePPMJCharacter::RestarLevel, gameOverDelay, false);
 		}
 	}
 }

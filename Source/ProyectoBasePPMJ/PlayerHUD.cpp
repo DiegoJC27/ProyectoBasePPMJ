@@ -3,3 +3,8 @@
 
 #include "PlayerHUD.h"
 
+void UPlayerHUD::SetPercent(float value ) {
+	if (value > 0.0f && value < 1.0f) {
+		HealthBar->SetPercent(value);
+	}
+}
