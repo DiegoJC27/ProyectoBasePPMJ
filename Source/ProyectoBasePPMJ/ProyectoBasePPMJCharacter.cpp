@@ -187,3 +187,8 @@ void AProyectoBasePPMJCharacter::UpdateHUD()
 		}
 	}
 }
+
+void AProyectoBasePPMJCharacter::CollectKey()
+{
+	keysCollected++;
+}

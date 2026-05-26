@@ -117,6 +117,12 @@ public:
 	void RestarLevel();
 
 	void UpdateHUD();
+
+	UPROPERTY(VisibleAnywhere)
+	int keysCollected;
+
+	UFUNCTION()
+	void CollectKey();
 public:
 
 	/** Returns CameraBoom subobject **/
