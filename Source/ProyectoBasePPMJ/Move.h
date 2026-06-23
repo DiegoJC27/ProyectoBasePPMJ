@@ -31,8 +31,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	FVector moveOffset;
 
+	UPROPERTY(VisibleAnywhere)
 	FVector startLocation;
 
+	UPROPERTY(VisibleAnywhere)
 	FVector targetLocation;
 
 	UPROPERTY(EditAnywhere)

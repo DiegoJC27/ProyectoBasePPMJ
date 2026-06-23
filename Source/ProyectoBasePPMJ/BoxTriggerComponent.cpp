@@ -40,7 +40,7 @@ void UBoxTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 void UBoxTriggerComponent::Trigger(bool triggerValue)
 {
 	isTriggered = triggerValue;
-	if (moveComp) moveComp->SetShouldMove(true);
+	if (moveComp) moveComp->SetShouldMove(triggerValue);
 }
 
 void UBoxTriggerComponent::OnBeginOverlap(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex, bool bFromSweep, const FHitResult& sweepResult)
@@ -52,6 +52,7 @@ void UBoxTriggerComponent::OnBeginOverlap(UPrimitiveComponent* overlappedComp, A
 void UBoxTriggerComponent::OnEndOverlap(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex)
 {
 	if (otherActor && otherActor->ActorHasTag("Player")) {
-		if (!isTriggered) Trigger(false);
+		UE_LOG(LogTemp, Warning, TEXT("el jugador se sale"));
+		if (isTriggered) Trigger(false);
 	}
 }

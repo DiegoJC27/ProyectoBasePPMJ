@@ -40,7 +40,7 @@ public:
 	UMove* moveComp;
 
 	UFUNCTION()
-	void OnBeginOverlap(UPrimitiveComponent* overlappedComp, AActor* other,
+	virtual void OnBeginOverlap(UPrimitiveComponent* overlappedComp, AActor* other,
 		UPrimitiveComponent* otherComp, int32 otherBodyIndex,
 		bool bFromSweep, const FHitResult& sweepResult);
 
